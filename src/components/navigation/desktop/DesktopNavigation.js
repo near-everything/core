@@ -15,7 +15,6 @@ const StyledNavigation = styled.div`
   left: 0;
   right: 0;
   width: 100%;
-  background-color: var(--slate-dark-1);
   z-index: 1000;
   padding: 12px 0;
 
@@ -60,16 +59,9 @@ export function DesktopNavigation(props) {
   return (
     <StyledNavigation>
       <div className="container">
-        <Link to="/" className="logo-link">
-          <Logotype />
-        </Link>
         <div className="navigation-section">
           <NavigationButton route="/">Home</NavigationButton>
           <NavigationButton route="/edit">Create</NavigationButton>
-          <NavigationButton href="https://thewiki.near.page/near.social_docs">
-            Documentation
-            <ArrowUpRight />
-          </NavigationButton>
         </div>
         <div className="user-section">
           {!props.signedIn && (

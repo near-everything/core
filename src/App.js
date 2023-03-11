@@ -6,7 +6,7 @@ import "bootstrap/dist/js/bootstrap.bundle";
 import "App.scss";
 import { HashRouter as Router, Link, Route, Switch } from "react-router-dom";
 import { NearConfig, StorageCostPerByte, useNear } from "./data/near";
-import EditorPage from "./pages/EditorPage";
+import CreatePage from "./pages/CreatePage";
 import ViewPage from "./pages/ViewPage";
 import { setupModal } from "@near-wallet-selector/modal-ui";
 import EmbedPage from "./pages/EmbedPage";
@@ -117,9 +117,9 @@ function App(props) {
           <Route path={"/embed/:widgetSrc*"}>
             <EmbedPage {...passProps} />
           </Route>
-          <Route path={"/edit/:widgetSrc*"}>
+          <Route path={"/create/:widgetSrc*"}>
             <NavigationWrapper {...passProps} />
-            <EditorPage {...passProps} />
+            <CreatePage {...passProps} />
           </Route>
           <Route path={"/:widgetSrc*"}>
             <NavigationWrapper {...passProps} />

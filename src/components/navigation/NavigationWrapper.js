@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { DesktopNavigation } from "./desktop/DesktopNavigation";
+import React, { useEffect, useState } from "react";
 import { MobileNavigation } from "./mobile/MobileNavigation";
 
 export function NavigationWrapper(props) {
@@ -14,8 +13,8 @@ export function NavigationWrapper(props) {
   }, []);
   return (
     <>
-      {matches && <DesktopNavigation {...props} />}
-      {!matches && <MobileNavigation {...props} />}
+      {/* {matches && <DesktopNavigation {...props} />} */}
+      <MobileNavigation {...props} />
       <div style={{ height: "100px" }} />
     </>
   );

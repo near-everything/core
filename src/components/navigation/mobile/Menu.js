@@ -35,6 +35,7 @@ const StyledMenu = styled.div`
 
   .left-side {
     flex: 80;
+    max-width: 400px;
     background-color: var(--slate-dark-1);
     position: relative;
     display: flex;
@@ -202,15 +203,9 @@ export function Menu(props) {
             </NavigationButton>
           </li>
           <li>
-            <NavigationButton route="/edit">
+            <NavigationButton route="/create">
               <Code />
               Create
-            </NavigationButton>
-          </li>
-          <li>
-            <NavigationButton href="https://thewiki.near.page/near.social_docs">
-              <Book />
-              Documentation
             </NavigationButton>
           </li>
         </ul>

@@ -12,7 +12,6 @@ const StyledNavigation = styled.div`
   left: 0;
   right: 0;
   width: 100%;
-  background-color: var(--slate-dark-1);
   z-index: 1000;
   padding: 16px 24px;
   display: flex;
@@ -48,16 +47,13 @@ export function Navigation(props) {
         onClick={props.onClickShowMenu}
         currentPage={props.currentPage}
       />
-      <Link to="/" className="logo-link">
-        <NearSocialLogo />
-      </Link>
-      {props.signedIn ? (
+      {/* {props.signedIn ? (
         <NotificationWidget
           notificationButtonSrc={props.NearConfig.widgets.notificationButton}
         />
       ) : (
         <SignInButton onSignIn={() => props.requestSignIn()} />
-      )}
+      )} */}
     </StyledNavigation>
   );
 }

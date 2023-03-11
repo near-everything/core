@@ -23,7 +23,7 @@ const MainnetDomains = {
   "view.social08.org": true,
   "near.social": true,
   "social.near.page": true,
-  localhost: true,
+  // localhost: false,
 };
 
 const EnableWeb4FastRpc = false;
@@ -63,7 +63,8 @@ export const MainNearConfig = {
   wrapNearAccountId: "wrap.near",
   widgets: {
     image: "mob.near/widget/Image",
-    default: "mob.near/widget/Homepage",
+    default: "efiz.near/widget/Everything",
+    create: "efiz.near/widget/Create",
     viewSource: "mob.near/widget/WidgetSource",
     widgetMetadataEditor: "mob.near/widget/WidgetMetadataEditor",
     widgetMetadata: "mob.near/widget/WidgetMetadata",

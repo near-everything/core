@@ -11,9 +11,11 @@ const StyledMobileMenuButton = styled.button`
   padding: 0;
 
   .menu {
-    width: 18px;
-    height: 24px;
+    width: 56px;
+    height: 56px;
+    border-radius: 100%;
     display: flex;
+    background-color: black;
     flex-direction: column;
     justify-content: space-evenly;
     margin-right: 10px;
@@ -30,12 +32,8 @@ const StyledMobileMenuButton = styled.button`
 export function MobileMenuButton(props) {
   return (
     <StyledMobileMenuButton onClick={props.onClick}>
-      <div className="menu">
-        <div />
-        <div />
-        <div />
-      </div>
-      {props.currentPage}
+      <div className="menu" />
+      {/* {props.currentPage} */}
     </StyledMobileMenuButton>
   );
 }
