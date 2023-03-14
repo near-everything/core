@@ -14,6 +14,7 @@ import { sanitizeUrl } from "@braintree/sanitize-url";
 import { NearConfig } from "../data/near";
 import { Markdown } from "../components/Markdown";
 import InfiniteScroll from "react-infinite-scroller";
+import Masonry from 'react-masonry-css';
 import { CommitButton } from "../components/Commit";
 import "react-bootstrap-typeahead/css/Typeahead.css";
 import "react-bootstrap-typeahead/css/Typeahead.bs5.css";
@@ -104,6 +105,7 @@ const ApprovedTags = {
   label: true,
   small: true,
   InfiniteScroll: true,
+  Masonry: true,
   Typeahead: false,
   Tooltip: true,
   OverlayTrigger: true,
@@ -485,6 +487,8 @@ class VmStack {
       );
     } else if (element === "InfiniteScroll") {
       return <InfiniteScroll {...attributes}>{children}</InfiniteScroll>;
+    } else if (element === "Masonry") {
+      return <Masonry {...attributes} className="masonry-grid" columnClassName="masonry-grid_column">{children}</Masonry>;
     } else if (element === "Tooltip") {
       return <Tooltip {...attributes}>{children}</Tooltip>;
     } else if (element === "OverlayTrigger") {
