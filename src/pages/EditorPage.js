@@ -1,17 +1,17 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Widget } from "../components/Widget/Widget";
+import Editor from "@monaco-editor/react";
 import ls from "local-storage";
-import { LsKey, NearConfig, useNear } from "../data/near";
 import prettier from "prettier";
 import parserBabel from "prettier/parser-babel";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { Nav } from "react-bootstrap";
 import { useHistory, useParams } from "react-router-dom";
-import Editor from "@monaco-editor/react";
-import { useCache } from "../data/cache";
 import { CommitButton } from "../components/Commit";
-import { Nav, OverlayTrigger, Tooltip } from "react-bootstrap";
-import RenameModal from "../components/Editor/RenameModal";
 import OpenModal from "../components/Editor/OpenModal";
+import RenameModal from "../components/Editor/RenameModal";
+import { Widget } from "../components/Widget/Widget";
 import { useAccountId } from "../data/account";
+import { useCache } from "../data/cache";
+import { LsKey, NearConfig, useNear } from "../data/near";
 
 const StorageDomain = {
   page: "editor",
@@ -23,20 +23,18 @@ const StorageType = {
 };
 
 const Filetype = {
-  Widget: "widget",
+  Type: "type",
   Module: "module",
 };
 
 const EditorLayoutKey = LsKey + "editorLayout:";
-const WidgetPropsKey = LsKey + "widgetProps:";
 
 const DefaultEditorCode = "return <div>Hello World</div>;";
 
 const Tab = {
   Editor: "Editor",
-  Props: "Props",
   Metadata: "Metadata",
-  Widget: "Widget",
+  Yype: "Type",
 };
 
 const Layout = {
@@ -45,9 +43,9 @@ const Layout = {
 };
 
 export default function EditorPage(props) {
-  const { widgetSrc } = useParams();
+  const { typeSrc } = useParams();
   const history = useHistory();
-  const setWidgetSrc = props.setWidgetSrc;
+  const setTypeSrc = props.setTypeSrc;
 
   const [loading, setLoading] = useState(false);
   const [code, setCode] = useState(undefined);
@@ -58,11 +56,6 @@ export default function EditorPage(props) {
   const [showOpenModal, setShowOpenModal] = useState(false);
 
   const [renderCode, setRenderCode] = useState(code);
-  const [widgetProps, setWidgetProps] = useState(
-    ls.get(WidgetPropsKey) || "{}"
-  );
-  const [parsedWidgetProps, setParsedWidgetProps] = useState({});
-  const [propsError, setPropsError] = useState(null);
   const [metadata, setMetadata] = useState(undefined);
   const near = useNear();
   const cache = useCache();
@@ -82,11 +75,11 @@ export default function EditorPage(props) {
   );
 
   useEffect(() => {
-    setWidgetSrc({
+    setTypeSrc({
       edit: null,
-      view: widgetSrc,
+      view: typeSrc,
     });
-  }, [widgetSrc, setWidgetSrc]);
+  }, [typeSrc, setTypeSrc]);
 
   const updateCode = useCallback(
     (path, code) => {
@@ -105,18 +98,6 @@ export default function EditorPage(props) {
     },
     [cache, setCode]
   );
-
-  useEffect(() => {
-    ls.set(WidgetPropsKey, widgetProps);
-    try {
-      const parsedWidgetProps = JSON.parse(widgetProps);
-      setParsedWidgetProps(parsedWidgetProps);
-      setPropsError(null);
-    } catch (e) {
-      setParsedWidgetProps({});
-      setPropsError(e.message);
-    }
-  }, [widgetProps]);
 
   const removeFromFiles = useCallback(
     (path) => {
@@ -195,22 +176,22 @@ export default function EditorPage(props) {
       if (!near) {
         return;
       }
-      const widgetSrc =
+      const typeSrc =
         nameOrPath.indexOf("/") >= 0
           ? nameOrPath
-          : `${accountId}/widget/${nameOrPath}`;
+          : `${accountId}/typ/${nameOrPath}`;
       const c = () => {
         const code = cache.socialGet(
           near,
-          widgetSrc,
+          typeSrc,
           false,
           undefined,
           undefined,
           c
         );
         if (code) {
-          const name = widgetSrc.split("/").slice(2).join("/");
-          openFile(toPath(Filetype.Widget, widgetSrc), code);
+          const name = typeSrc.split("/").slice(2).join("/");
+          openFile(toPath(Filetype.Type, typeSrc), code);
         }
       };
 
@@ -278,26 +259,26 @@ export default function EditorPage(props) {
     if (!near || !files) {
       return;
     }
-    if (widgetSrc) {
-      if (widgetSrc === "new") {
-        createFile(Filetype.Widget);
+    if (typeSrc) {
+      if (typeSrc === "new") {
+        createFile(Filetype.Type);
       } else {
-        loadFile(widgetSrc);
+        loadFile(typeSrc);
       }
       analytics("edit", {
         props: {
-          widget: widgetSrc,
+          type: typeSrc,
         },
       });
       history.replace(`/edit/`);
     } else if (path === undefined) {
       if (files.length === 0) {
-        createFile(Filetype.Widget);
+        createFile(Filetype.Type);
       } else {
         openFile(lastPath, undefined);
       }
     }
-  }, [near, createFile, lastPath, files, path, widgetSrc, openFile, loadFile]);
+  }, [near, createFile, lastPath, files, path, typeSrc, openFile, loadFile]);
 
   const reformat = useCallback(
     (path, code) => {
@@ -314,18 +295,6 @@ export default function EditorPage(props) {
     [updateCode]
   );
 
-  const reformatProps = useCallback(
-    (props) => {
-      try {
-        const formattedProps = JSON.stringify(JSON.parse(props), null, 2);
-        setWidgetProps(formattedProps);
-      } catch (e) {
-        console.log(e);
-      }
-    },
-    [setWidgetProps]
-  );
-
   const layoutClass = layout === Layout.Split ? "col-lg-6" : "";
 
   const onLayoutChange = useCallback(
@@ -339,27 +308,42 @@ export default function EditorPage(props) {
     [setLayout, tab, setTab]
   );
 
-  const widgetName = path?.name;
+  const typeName = path?.name;
 
   const commitButton = (
+    // <CommitButton
+    //   className="btn btn-primary"
+    //   disabled={!typeName}
+    //   near={near}
+    //   data={{
+    //     widget: {
+    //       [typeName]: {
+    //         "": code,
+    //         metadata,
+    //       },
+    //     },
+    //   }}
+    // >
+    //   Save Widget
+    // </CommitButton>
     <CommitButton
       className="btn btn-primary"
-      disabled={!widgetName}
+      disabled={!typeName}
       near={near}
       data={{
-        widget: {
-          [widgetName]: {
+        type: {
+          [typeName]: {
             "": code,
             metadata,
           },
         },
       }}
     >
-      Save Widget
+      Save Type
     </CommitButton>
   );
 
-  const widgetPath = `${accountId}/${path?.type}/${path?.name}`;
+  const typePath = `${accountId}/${path?.type}/${path?.name}`;
   const jpath = JSON.stringify(path);
 
   return (
@@ -376,8 +360,8 @@ export default function EditorPage(props) {
         onOpen={(newName) => loadFile(newName)}
         onNew={(newName) =>
           newName
-            ? openFile(toPath(Filetype.Widget, newName), DefaultEditorCode)
-            : createFile(Filetype.Widget)
+            ? openFile(toPath(Filetype.Type, newName), DefaultEditorCode)
+            : createFile(Filetype.Type)
         }
         onHide={() => setShowOpenModal(false)}
       />
@@ -407,7 +391,7 @@ export default function EditorPage(props) {
                         if (files.length > 1) {
                           openFile(files[idx - 1] || files[idx + 1]);
                         } else {
-                          createFile(Filetype.Widget);
+                          createFile(Filetype.Type);
                         }
                       }
                     }}
@@ -427,18 +411,19 @@ export default function EditorPage(props) {
             </Nav.Link>
           </Nav.Item>
         </Nav>
-        {NearConfig.widgets.editorComponentSearch && (
+        {/* TODO: Convert to search for types */}
+        {/* {NearConfig.widgets.editorComponentSearch && (
           <div>
             <Widget
               src={NearConfig.widgets.editorComponentSearch}
               props={useMemo(
                 () => ({
-                  extraButtons: ({ widgetName, widgetPath, onHide }) => (
+                  extraButtons: ({ typeName, typePath, onHide }) => (
                     <OverlayTrigger
                       placement="auto"
                       overlay={
                         <Tooltip>
-                          Open "{widgetName}" component in the editor
+                          Open "{typeName}" component in the editor
                         </Tooltip>
                       }
                     >
@@ -446,7 +431,7 @@ export default function EditorPage(props) {
                         className="btn btn-outline-primary"
                         onClick={(e) => {
                           e.preventDefault();
-                          loadFile(widgetPath);
+                          loadFile(typePath);
                           onHide && onHide();
                         }}
                       >
@@ -459,7 +444,7 @@ export default function EditorPage(props) {
               )}
             />
           </div>
-        )}
+        )} */}
       </div>
       <div className="d-flex align-content-start">
         <div className="me-2">
@@ -512,15 +497,6 @@ export default function EditorPage(props) {
                     Editor
                   </button>
                 </li>
-                <li className="nav-item">
-                  <button
-                    className={`nav-link ${tab === Tab.Props ? "active" : ""}`}
-                    aria-current="page"
-                    onClick={() => setTab(Tab.Props)}
-                  >
-                    Props
-                  </button>
-                </li>
                 {NearConfig.widgets.widgetMetadataEditor && (
                   <li className="nav-item">
                     <button
@@ -556,7 +532,7 @@ export default function EditorPage(props) {
                 <div className="form-control mb-3" style={{ height: "70vh" }}>
                   <Editor
                     value={code}
-                    path={widgetPath}
+                    path={typePath}
                     defaultLanguage="javascript"
                     onChange={(code) => updateCode(path, code)}
                     wrapperProps={{
@@ -565,7 +541,7 @@ export default function EditorPage(props) {
                   />
                 </div>
                 <div className="mb-3 d-flex gap-2 flex-wrap">
-                  <button
+                  {/* <button
                     className="btn btn-success"
                     onClick={() => {
                       setRenderCode(code);
@@ -575,7 +551,7 @@ export default function EditorPage(props) {
                     }}
                   >
                     Render preview
-                  </button>
+                  </button> */}
                   {!path?.unnamed && commitButton}
                   <button
                     className={`btn ${
@@ -590,7 +566,7 @@ export default function EditorPage(props) {
                   {path && accountId && (
                     <a
                       className="btn btn-outline-primary"
-                      href={`#/${widgetPath}`}
+                      href={`#/${typePath}`}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
@@ -598,22 +574,6 @@ export default function EditorPage(props) {
                     </a>
                   )}
                 </div>
-              </div>
-              <div className={`${tab === Tab.Props ? "" : "visually-hidden"}`}>
-                <div className="form-control" style={{ height: "70vh" }}>
-                  <Editor
-                    value={widgetProps}
-                    defaultLanguage="json"
-                    onChange={(props) => setWidgetProps(props)}
-                    wrapperProps={{
-                      onBlur: () => reformatProps(widgetProps),
-                    }}
-                  />
-                </div>
-                <div className=" mb-3">^^ Props for debugging (in JSON)</div>
-                {propsError && (
-                  <pre className="alert alert-danger">{propsError}</pre>
-                )}
               </div>
               <div
                 className={`${
@@ -629,38 +589,14 @@ export default function EditorPage(props) {
                     key={`metadata-editor-${jpath}`}
                     props={useMemo(
                       () => ({
-                        widgetPath,
+                        typePath,
                         onChange: setMetadata,
                       }),
-                      [widgetPath]
+                      [typePath]
                     )}
                   />
                 </div>
                 <div className="mb-3">{commitButton}</div>
-              </div>
-            </div>
-            <div
-              className={`${
-                tab === Tab.Widget ||
-                (layout === Layout.Split && tab !== Tab.Metadata)
-                  ? layoutClass
-                  : "visually-hidden"
-              }`}
-            >
-              <div className="container">
-                <div className="row">
-                  <div className="d-inline-block position-relative overflow-hidden">
-                    {renderCode ? (
-                      <Widget
-                        key={`preview-${jpath}`}
-                        code={renderCode}
-                        props={parsedWidgetProps}
-                      />
-                    ) : (
-                      'Click "Render preview" button to render the widget'
-                    )}
-                  </div>
-                </div>
               </div>
             </div>
             <div
@@ -675,8 +611,8 @@ export default function EditorPage(props) {
                       key={`metadata-${jpath}`}
                       src={NearConfig.widgets.widgetMetadata}
                       props={useMemo(
-                        () => ({ metadata, accountId, widgetName }),
-                        [metadata, accountId, widgetName]
+                        () => ({ metadata, accountId, typeName }),
+                        [metadata, accountId, typeName]
                       )}
                     />
                   </div>

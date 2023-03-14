@@ -7,35 +7,35 @@ export default function OpenModal(props) {
   const onNew = props.onNew;
   const show = props.show;
 
-  const [widgetSrc, setWidgetSrc] = useState("");
+  const [typeSrc, setTypeSrc] = useState("");
 
   return (
     <Modal centered scrollable show={show} onHide={onHide}>
       <Modal.Header closeButton>
-        <Modal.Title>Open widget</Modal.Title>
+        <Modal.Title>Open type</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <label htmlFor="widget-src-input" className="form-label">
-          Widget name <span className="text-muted">(or path)</span>
+        <label htmlFor="type-src-input" className="form-label">
+          Type name <span className="text-muted">(or path)</span>
         </label>
         <input
           className="form-control"
-          id="widget-src-input"
+          id="type-src-input"
           type="text"
-          value={widgetSrc}
+          value={typeSrc}
           onChange={(e) =>
-            setWidgetSrc(e.target.value.replaceAll(/[^a-zA-Z0-9_.\-\/]/g, ""))
+            setTypeSrc(e.target.value.replaceAll(/[^a-zA-Z0-9_.\-\/]/g, ""))
           }
         />
       </Modal.Body>
       <Modal.Footer>
         <button
           className="btn btn-success"
-          disabled={!widgetSrc}
+          disabled={!typeSrc}
           onClick={(e) => {
             e.preventDefault();
-            onOpen(widgetSrc);
-            setWidgetSrc("");
+            onOpen(typeSrc);
+            setTypeSrc("");
             onHide();
           }}
         >
@@ -43,11 +43,11 @@ export default function OpenModal(props) {
         </button>
         <button
           className="btn btn-outline-success"
-          disabled={widgetSrc && widgetSrc.indexOf("/") !== -1}
+          disabled={typeSrc && typeSrc.indexOf("/") !== -1}
           onClick={(e) => {
             e.preventDefault();
-            onNew(widgetSrc);
-            setWidgetSrc("");
+            onNew(typeSrc);
+            setTypeSrc("");
             onHide();
           }}
         >

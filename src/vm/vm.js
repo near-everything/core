@@ -150,6 +150,7 @@ const Keywords = {
   console: true,
   styled: true,
   Object: true,
+  Type: true,
   Date,
   Number,
   Big,
@@ -613,6 +614,11 @@ class VmStack {
           blockId,
           maybeSubscribe(subscribe, blockId)
         );
+      // START Type
+      } else if (keyword === "Type" && callee === "init") {
+        // This can copy State
+
+      // END Type
       } else if (keyword === "Near" && callee === "asyncView") {
         if (args.length < 2) {
           throw new Error(

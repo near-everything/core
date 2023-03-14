@@ -10,6 +10,7 @@ import CreatePage from "./pages/CreatePage";
 import ViewPage from "./pages/ViewPage";
 import { setupModal } from "@near-wallet-selector/modal-ui";
 import EmbedPage from "./pages/EmbedPage";
+import EditorPage from "./pages/EditorPage";
 import { useAccount } from "./data/account";
 import Big from "big.js";
 import { NavigationWrapper } from "./components/navigation/NavigationWrapper";
@@ -23,6 +24,7 @@ function App(props) {
   const [availableStorage, setAvailableStorage] = useState(null);
   const [walletModal, setWalletModal] = useState(null);
   const [widgetSrc, setWidgetSrc] = useState(null);
+  const [typeSrc, setTypeSrc] = useState(null);
 
   const near = useNear();
   const account = useAccount();
@@ -105,6 +107,8 @@ function App(props) {
     connected,
     availableStorage,
     widgetSrc,
+    typeSrc,
+    setTypeSrc,
     logOut,
     requestSignIn,
     NearConfig,
@@ -120,6 +124,10 @@ function App(props) {
           <Route path={"/create/:widgetSrc*"}>
             <NavigationWrapper {...passProps} />
             <CreatePage {...passProps} />
+          </Route>
+          <Route path={"/editor/:widgetSrc*"}>
+            <NavigationWrapper {...passProps} />
+            <EditorPage {...passProps} />
           </Route>
           <Route path={"/:widgetSrc*"}>
             <NavigationWrapper {...passProps} />

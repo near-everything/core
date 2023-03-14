@@ -4,7 +4,7 @@ import React, {
   useLayoutEffect,
   useState,
 } from "react";
-import { Parser } from "acorn";
+import { Parser } from "acorn"; // JSX Parser
 import * as jsx from "acorn-jsx";
 import { TGas, useNear } from "../../data/near";
 import ConfirmTransactions from "../ConfirmTransactions";
@@ -62,7 +62,7 @@ export function Widget(props) {
     setParsedCode(null);
     setElement(null);
     if (src) {
-      const code = cache.socialGet(
+      const code = cache.socialGet( // social get
         near,
         src.toString(),
         false,
