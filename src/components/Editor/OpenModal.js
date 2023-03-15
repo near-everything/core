@@ -6,13 +6,14 @@ export default function OpenModal(props) {
   const onOpen = props.onOpen;
   const onNew = props.onNew;
   const show = props.show;
+  const type = props.type
 
-  const [typeSrc, setTypeSrc] = useState("");
+  const [src, setSrc] = useState("");
 
   return (
     <Modal centered scrollable show={show} onHide={onHide}>
       <Modal.Header closeButton>
-        <Modal.Title>Open type</Modal.Title>
+        <Modal.Title>Open {type}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <label htmlFor="type-src-input" className="form-label">
@@ -22,20 +23,20 @@ export default function OpenModal(props) {
           className="form-control"
           id="type-src-input"
           type="text"
-          value={typeSrc}
+          value={src}
           onChange={(e) =>
-            setTypeSrc(e.target.value.replaceAll(/[^a-zA-Z0-9_.\-\/]/g, ""))
+            setSrc(e.target.value.replaceAll(/[^a-zA-Z0-9_.\-\/]/g, ""))
           }
         />
       </Modal.Body>
       <Modal.Footer>
         <button
           className="btn btn-success"
-          disabled={!typeSrc}
+          disabled={!src}
           onClick={(e) => {
             e.preventDefault();
-            onOpen(typeSrc);
-            setTypeSrc("");
+            onOpen(src);
+            setSrc("");
             onHide();
           }}
         >
@@ -43,11 +44,11 @@ export default function OpenModal(props) {
         </button>
         <button
           className="btn btn-outline-success"
-          disabled={typeSrc && typeSrc.indexOf("/") !== -1}
+          disabled={src && src.indexOf("/") !== -1}
           onClick={(e) => {
             e.preventDefault();
-            onNew(typeSrc);
-            setTypeSrc("");
+            onNew(src);
+            setSrc("");
             onHide();
           }}
         >
