@@ -29,7 +29,7 @@ const Filetype = {
 
 const EditorLayoutKey = LsKey + "editorLayout:";
 
-const DefaultEditorCode = "return <div>Hello World</div>;";
+const DefaultEditorCode = "{}";
 
 const Tab = {
   Editor: "Editor",
@@ -533,7 +533,7 @@ export default function EditorPage(props) {
                   <Editor
                     value={code}
                     path={typePath}
-                    defaultLanguage="javascript"
+                    defaultLanguage="json"
                     onChange={(code) => updateCode(path, code)}
                     wrapperProps={{
                       onBlur: () => reformat(path, code),

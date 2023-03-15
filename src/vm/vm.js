@@ -615,9 +615,12 @@ class VmStack {
           maybeSubscribe(subscribe, blockId)
         );
       // START Type
-      } else if (keyword === "Type" && callee === "init") {
-        // This can copy State
-
+      } else if (keyword === "Type" && callee === "get") {
+        if (args.length < 1) {
+          throw new Error("Missing argument 'src' for Type.get");
+        }
+        const raw = this.vm.cachedSocialGet(args[0], false, undefined, undefined);
+        return JSON.parse(raw);
       // END Type
       } else if (keyword === "Near" && callee === "asyncView") {
         if (args.length < 2) {
