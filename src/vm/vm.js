@@ -620,7 +620,11 @@ class VmStack {
           throw new Error("Missing argument 'src' for Type.get");
         }
         const raw = this.vm.cachedSocialGet(args[0], false, undefined, undefined);
-        return JSON.parse(raw);
+        if (raw) {
+          return JSON.parse(raw);
+        } else {
+          return null;
+        }
       // END Type
       } else if (keyword === "Near" && callee === "asyncView") {
         if (args.length < 2) {

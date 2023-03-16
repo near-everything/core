@@ -569,7 +569,7 @@ export default function TypeEditor(props) {
                 }`}
               >
                 <div className="mb-3">
-                  <Widget
+                  {/* <Widget
                     src={NearConfig.widgets.widgetMetadataEditor}
                     key={`metadata-editor-${jpath}`}
                     props={useMemo(
@@ -579,7 +579,7 @@ export default function TypeEditor(props) {
                       }),
                       [typePath]
                     )}
-                  />
+                  /> */}
                 </div>
                 <div className="mb-3">{commitButton}</div>
               </div>

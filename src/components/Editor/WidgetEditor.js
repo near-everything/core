@@ -428,7 +428,7 @@ export default function WidgetEditor(props) {
             </Nav.Link>
           </Nav.Item>
         </Nav>
-        {NearConfig.widgets.editorComponentSearch && (
+        {/* {NearConfig.widgets.editorComponentSearch && (
           <div>
             <Widget
               src={NearConfig.widgets.editorComponentSearch}
@@ -460,7 +460,7 @@ export default function WidgetEditor(props) {
               )}
             />
           </div>
-        )}
+        )} */}
       </div>
       <div className="d-flex align-content-start">
         <div className="me-2">
@@ -625,7 +625,7 @@ export default function WidgetEditor(props) {
                 }`}
               >
                 <div className="mb-3">
-                  <Widget
+                  {/* <Widget
                     src={NearConfig.widgets.widgetMetadataEditor}
                     key={`metadata-editor-${jpath}`}
                     props={useMemo(
@@ -635,7 +635,7 @@ export default function WidgetEditor(props) {
                       }),
                       [widgetPath]
                     )}
-                  />
+                  /> */}
                 </div>
                 <div className="mb-3">{commitButton}</div>
               </div>
@@ -672,14 +672,14 @@ export default function WidgetEditor(props) {
               <div className="container">
                 <div className="row">
                   <div className="d-inline-block position-relative overflow-hidden">
-                    <Widget
+                    {/* <Widget
                       key={`metadata-${jpath}`}
                       src={NearConfig.widgets.widgetMetadata}
                       props={useMemo(
                         () => ({ metadata, accountId, widgetName }),
                         [metadata, accountId, widgetName]
                       )}
-                    />
+                    /> */}
                   </div>
                 </div>
               </div>
