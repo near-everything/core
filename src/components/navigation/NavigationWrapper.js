@@ -6,6 +6,8 @@ export function NavigationWrapper(props) {
     window.matchMedia("(min-width: 992px)").matches
   );
 
+  const { buffer } = props;
+
   useEffect(() => {
     window
       .matchMedia("(min-width: 992px)")
@@ -15,7 +17,7 @@ export function NavigationWrapper(props) {
     <>
       {/* {matches && <DesktopNavigation {...props} />} */}
       <MobileNavigation {...props} />
-      <div style={{ height: "100px" }} />
+      <div style={{ height: buffer }} />
     </>
   );
 }

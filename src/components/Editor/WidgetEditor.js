@@ -625,7 +625,7 @@ export default function WidgetEditor(props) {
                 }`}
               >
                 <div className="mb-3">
-                  {/* <Widget
+                  <Widget
                     src={NearConfig.widgets.widgetMetadataEditor}
                     key={`metadata-editor-${jpath}`}
                     props={useMemo(
@@ -635,7 +635,7 @@ export default function WidgetEditor(props) {
                       }),
                       [widgetPath]
                     )}
-                  /> */}
+                  />
                 </div>
                 <div className="mb-3">{commitButton}</div>
               </div>
@@ -652,11 +652,13 @@ export default function WidgetEditor(props) {
                 <div className="row">
                   <div className="d-inline-block position-relative overflow-hidden">
                     {renderCode ? (
+                      <>
                       <Widget
                         key={`preview-${jpath}`}
                         code={renderCode}
                         props={parsedWidgetProps}
                       />
+                      </>
                     ) : (
                       'Click "Render preview" button to render the widget'
                     )}

@@ -208,6 +208,12 @@ export function Menu(props) {
               Create
             </NavigationButton>
           </li>
+          <li>
+            <NavigationButton route="/editor">
+              <Code />
+              Editor
+            </NavigationButton>
+          </li>
         </ul>
         <ul className="bottom-links">
           {props.widgetSrc?.edit && (

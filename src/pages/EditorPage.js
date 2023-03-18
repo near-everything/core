@@ -8,7 +8,7 @@ const View = {
 };
 
 export default function EditorPage(props) {
-  const [view, setView] = useState(View.Widgets);
+  const [view, setView] = useState(View.Types);
 
   return (
     <div className="container-fluid mt-1">
@@ -17,7 +17,7 @@ export default function EditorPage(props) {
           <div className="row">
             <ul
               className={"nav nav-tabs mb-2"}
-              style={{ marginLeft: "0.5rem" }} // TODO: why doesn't ml-2 work?
+              style={{ paddingLeft: "6rem" }} // TODO: why doesn't pl-6 work?
             >
               <li className="nav-item">
                 <button

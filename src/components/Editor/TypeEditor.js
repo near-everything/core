@@ -12,6 +12,7 @@ import { CommitButton } from "../Commit";
 import OpenModal from "../Editor/OpenModal";
 import RenameModal from "../Editor/RenameModal";
 import { Widget } from "../Widget/Widget";
+import TypePreview from "./TypePreview";
 
 const StorageDomain = {
   page: "type-editor",
@@ -27,19 +28,12 @@ const Filetype = {
   Module: "module",
 };
 
-const EditorLayoutKey = LsKey + "editorLayout:";
-
 const DefaultEditorJson = "{}";
 
 const Tab = {
   Editor: "Editor",
   Metadata: "Metadata",
   Type: "Type",
-};
-
-const Layout = {
-  Tabs: "Tabs",
-  Split: "Split",
 };
 
 export default function TypeEditor(props) {
@@ -62,17 +56,6 @@ export default function TypeEditor(props) {
   const accountId = useAccountId();
 
   const [tab, setTab] = useState(Tab.Editor);
-  const [layout, setLayoutState] = useState(
-    ls.get(EditorLayoutKey) || Layout.Tabs
-  );
-
-  const setLayout = useCallback(
-    (layout) => {
-      ls.set(EditorLayoutKey, layout);
-      setLayoutState(layout);
-    },
-    [setLayoutState]
-  );
 
   useEffect(() => {
     setTypeSrc({
@@ -295,19 +278,6 @@ export default function TypeEditor(props) {
     [updateJson]
   );
 
-  const layoutClass = layout === Layout.Split ? "col-lg-6" : "";
-
-  const onLayoutChange = useCallback(
-    (e) => {
-      const layout = e.target.value;
-      if (layout === Layout.Split && tab === Tab.Widget) {
-        setTab(Tab.Editor);
-      }
-      setLayout(layout);
-    },
-    [setLayout, tab, setTab]
-  );
-
   const typeName = path?.name;
 
   const commitButton = (
@@ -432,46 +402,9 @@ export default function TypeEditor(props) {
         )} */}
       </div>
       <div className="d-flex align-content-start">
-        <div className="me-2">
-          <div
-            className="btn-group-vertical"
-            role="group"
-            aria-label="Layout selection"
-          >
-            <input
-              type="radio"
-              className="btn-check"
-              name="layout-radio"
-              id="layout-tabs"
-              autoComplete="off"
-              checked={layout === Layout.Tabs}
-              onChange={onLayoutChange}
-              value={Layout.Tabs}
-              title={"Set layout to Tabs mode"}
-            />
-            <label className="btn btn-outline-secondary" htmlFor="layout-tabs">
-              <i className="bi bi-square" />
-            </label>
-
-            <input
-              type="radio"
-              className="btn-check"
-              name="layout-radio"
-              id="layout-split"
-              autoComplete="off"
-              checked={layout === Layout.Split}
-              value={Layout.Split}
-              title={"Set layout to Split mode"}
-              onChange={onLayoutChange}
-            />
-            <label className="btn btn-outline-secondary" htmlFor="layout-split">
-              <i className="bi bi-layout-split" />
-            </label>
-          </div>
-        </div>
         <div className="flex-grow-1">
           <div className="row">
-            <div className={layoutClass}>
+            <div className={"col-lg-6"}>
               <ul className={`nav nav-tabs mb-2`}>
                 <li className="nav-item">
                   <button
@@ -495,22 +428,6 @@ export default function TypeEditor(props) {
                     </button>
                   </li>
                 )}
-                {layout === Layout.Tabs && (
-                  <li className="nav-item">
-                    <button
-                      className={`nav-link ${
-                        tab === Tab.Widget ? "active" : ""
-                      }`}
-                      aria-current="page"
-                      onClick={() => {
-                        setRenderJson(json);
-                        setTab(Tab.Widget);
-                      }}
-                    >
-                      Widget Preview
-                    </button>
-                  </li>
-                )}
               </ul>
 
               <div className={`${tab === Tab.Editor ? "" : "visually-hidden"}`}>
@@ -530,9 +447,6 @@ export default function TypeEditor(props) {
                     className="btn btn-success"
                     onClick={() => {
                       setRenderJson(json);
-                      if (layout === Layout.Tabs) {
-                        setTab(Tab.Type);
-                      }
                     }}
                   >
                     Render preview
@@ -569,7 +483,7 @@ export default function TypeEditor(props) {
                 }`}
               >
                 <div className="mb-3">
-                  {/* <Widget
+                  <Widget
                     src={NearConfig.widgets.widgetMetadataEditor}
                     key={`metadata-editor-${jpath}`}
                     props={useMemo(
@@ -579,14 +493,35 @@ export default function TypeEditor(props) {
                       }),
                       [typePath]
                     )}
-                  /> */}
+                  />
                 </div>
                 <div className="mb-3">{commitButton}</div>
               </div>
             </div>
             <div
               className={`${
-                tab === Tab.Metadata ? layoutClass : "visually-hidden"
+                tab === Tab.Widget || tab !== Tab.Metadata
+                  ? "col-lg-6"
+                  : "visually-hidden"
+              }`}
+            >
+              <div className="container">
+                <div className="row">
+                  <div className="d-inline-block position-relative overflow-hidden">
+                    {renderJson ? (
+                      <>
+                        <TypePreview renderJson={renderJson} jpath={jpath} />
+                      </>
+                    ) : (
+                      'Click "Render preview" button to render the autogenerated widgets'
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              className={`${
+                tab === Tab.Metadata ? "col-lg-6" : "visually-hidden"
               }`}
             >
               <div className="container">

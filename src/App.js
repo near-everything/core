@@ -112,6 +112,7 @@ function App(props) {
     logOut,
     requestSignIn,
     NearConfig,
+    buffer: "100px"
   };
 
   return (
@@ -126,7 +127,7 @@ function App(props) {
             <CreatePage {...passProps} />
           </Route>
           <Route path={"/editor/:widgetSrc*"}>
-            <NavigationWrapper {...passProps} />
+            <NavigationWrapper {...passProps} buffer={"30px"} />
             <EditorPage {...passProps} />
           </Route>
           <Route path={"/:widgetSrc*"}>

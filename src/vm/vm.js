@@ -626,6 +626,12 @@ class VmStack {
           return null;
         }
       // END Type
+      // START Everything
+      // } else if (keyword === "Everything" && callee === "create") {
+      //   if (args.length < 3) {
+      //     throw new Error("Method: Everything.create. Required arguments: 'type', 'data'")
+      //   }
+      // END Everything
       } else if (keyword === "Near" && callee === "asyncView") {
         if (args.length < 2) {
           throw new Error(

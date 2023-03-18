@@ -23,7 +23,7 @@ const MainnetDomains = {
   "view.social08.org": true,
   "near.social": true,
   "social.near.page": true,
-  // localhost: true
+  localhost: true
 };
 
 const EnableWeb4FastRpc = false;
@@ -41,6 +41,7 @@ const TestNearConfig = {
   widgets: {
     image: "eugenethedream/widget/Image",
     default: "efiz.testnet/widget/Everything",
+    create: "efiz.testnet/widget/Creators",
     viewSource: "eugenethedream/widget/WidgetSource",
     widgetMetadataEditor: "eugenethedream/widget/WidgetMetadataEditor",
     widgetMetadata: "eugenethedream/widget/WidgetMetadata",
@@ -63,8 +64,8 @@ export const MainNearConfig = {
   wrapNearAccountId: "wrap.near",
   widgets: {
     image: "mob.near/widget/Image",
-    default: "efiz.near/widget/Everything",
-    create: "efiz.near/widget/Create",
+    default: "evrything.near/widget/Everything.MainPage",
+    create: "evrything.near/widget/Everything.CreatePage",
     viewSource: "mob.near/widget/WidgetSource",
     widgetMetadataEditor: "mob.near/widget/WidgetMetadataEditor",
     widgetMetadata: "mob.near/widget/WidgetMetadata",
