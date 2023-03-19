@@ -8,10 +8,13 @@ import { useHistory, useParams } from "react-router-dom";
 import { useAccountId } from "../../data/account";
 import { useCache } from "../../data/cache";
 import { LsKey, NearConfig, useNear } from "../../data/near";
+import { CreateWidget, ViewWidget } from "../../data/widgets";
 import { CommitButton } from "../Commit";
 import OpenModal from "../Editor/OpenModal";
 import RenameModal from "../Editor/RenameModal";
 import { Widget } from "../Widget/Widget";
+import PropertyCreator from "./PropertyCreator";
+import TypeCreator from "./PropertyCreator";
 import TypePreview from "./TypePreview";
 
 const StorageDomain = {
@@ -48,6 +51,8 @@ export default function TypeEditor(props) {
   const [lastPath, setLastPath] = useState(undefined);
   const [showRenameModal, setShowRenameModal] = useState(false);
   const [showOpenModal, setShowOpenModal] = useState(false);
+  const [properties, setProperties] = useState([]);
+  const [renderProperties, setRenderProperties] = useState([]);
 
   const [renderJson, setRenderJson] = useState(json);
   const [metadata, setMetadata] = useState(undefined);
@@ -280,6 +285,59 @@ export default function TypeEditor(props) {
 
   const typeName = path?.name;
 
+  const generateJson = () => {
+    return JSON.stringify({
+      properties: properties,
+      widgets: {
+        view: `${accountId}/widget/Everything.View.${typeName}`,
+        create: `${accountId}/widget/Everything.Create.${typeName}`,
+      },
+    });
+  };
+
+  const generateView = () => {
+    return ViewWidget.replace(
+      "{SVG}",
+      '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" > <path d="M15.26 22C15.2 22 15.13 21.99 15.07 21.97C13.06 21.4 10.95 21.4 8.94003 21.97C8.57003 22.07 8.18003 21.86 8.08003 21.49C7.97003 21.12 8.19003 20.73 8.56003 20.63C10.82 19.99 13.2 19.99 15.46 20.63C15.83 20.74 16.05 21.12 15.94 21.49C15.84 21.8 15.56 22 15.26 22Z" fill="#292D32" /> <path d="M19.21 6.36001C18.17 4.26001 16.16 2.71001 13.83 2.20001C11.39 1.66001 8.88997 2.24001 6.97997 3.78001C5.05997 5.31001 3.96997 7.60001 3.96997 10.05C3.96997 12.64 5.51997 15.35 7.85997 16.92V17.75C7.84997 18.03 7.83997 18.46 8.17997 18.81C8.52997 19.17 9.04997 19.21 9.45997 19.21H14.59C15.13 19.21 15.54 19.06 15.82 18.78C16.2 18.39 16.19 17.89 16.18 17.62V16.92C19.28 14.83 21.23 10.42 19.21 6.36001ZM13.72 11.62L12.65 13.48C12.51 13.72 12.26 13.86 12 13.86C11.87 13.86 11.74 13.83 11.63 13.76C11.27 13.55 11.15 13.09 11.35 12.74L12.2 11.26H11.36C10.86 11.26 10.45 11.04 10.23 10.67C10.01 10.29 10.03 9.83001 10.28 9.39001L11.35 7.53001C11.56 7.17001 12.02 7.05001 12.37 7.25001C12.73 7.46001 12.85 7.92001 12.65 8.27001L11.8 9.75001H12.64C13.14 9.75001 13.55 9.97001 13.77 10.34C13.99 10.72 13.97 11.19 13.72 11.62Z" fill="#292D32" /> </svg>'
+    ).replace(
+      "{DATA}",
+      properties.map((it) => {
+        switch (it.type) {
+          case "String":
+            return `<p>{data["${it.name}"]}</p>`;
+          case "md":
+            return `<Markdown text={data["${it.name}"]} />`;
+          default:
+            return;
+        }
+      }).join(" ")
+    );
+  };
+
+  const generateCreate = () => {
+    const initState = properties.reduce((p, { name }) => {
+      p[name] = "";
+      return p;
+    }, {});
+
+    return CreateWidget.replace("TYPE_STR", `${accountId}/type/${typeName}`)
+      .replace("PROPERTIES", JSON.stringify(initState))
+      .replace("VERSION", "everythingv0")
+      .replace(
+        "{FORM_BODY}",
+        properties.map((it) => {
+          switch (it.type) {
+            case "String":
+              return `<Input placeholder="${it.name}" onChange={({ target }) => State.update({ "${it.name}": target.value })} />`;
+            case "md":
+              return `<TextArea placeholder="${it.name}" onInput={({ target }) => State.update({ "${it.name}": target.value })} />`;
+            default:
+              return;
+          }
+        }).join(" ")
+      );
+  };
+
   const commitButton = (
     <CommitButton
       className="btn btn-primary"
@@ -288,8 +346,16 @@ export default function TypeEditor(props) {
       data={{
         type: {
           [typeName]: {
-            "": json,
+            "": generateJson(),
             metadata,
+          },
+        },
+        widget: {
+          [`Everything.Create.${typeName}`]: {
+            "": generateCreate()
+          },
+          [`Everything.View.${typeName}`]: {
+            "": generateView()
           },
         },
       }}
@@ -432,25 +498,17 @@ export default function TypeEditor(props) {
 
               <div className={`${tab === Tab.Editor ? "" : "visually-hidden"}`}>
                 <div className="form-control mb-3" style={{ height: "70vh" }}>
-                  <Editor
-                    value={json}
-                    path={typePath}
-                    defaultLanguage="json"
-                    onChange={(json) => updateJson(path, json)}
-                    wrapperProps={{
-                      onBlur: () => reformat(path, json),
-                    }}
+                  <PropertyCreator
+                    addProperty={(property) =>
+                      setProperties([...properties, property])
+                    }
+                    removeProperty={(property) =>
+                      setProperties(properties.filter((it) => it !== property))
+                    }
+                    properties={properties}
                   />
                 </div>
                 <div className="mb-3 d-flex gap-2 flex-wrap">
-                  <button
-                    className="btn btn-success"
-                    onClick={() => {
-                      setRenderJson(json);
-                    }}
-                  >
-                    Render preview
-                  </button>
                   {!path?.unnamed && commitButton}
                   <button
                     className={`btn ${
@@ -508,13 +566,7 @@ export default function TypeEditor(props) {
               <div className="container">
                 <div className="row">
                   <div className="d-inline-block position-relative overflow-hidden">
-                    {renderJson ? (
-                      <>
-                        <TypePreview renderJson={renderJson} jpath={jpath} />
-                      </>
-                    ) : (
-                      'Click "Render preview" button to render the autogenerated widgets'
-                    )}
+                    <TypePreview properties={properties} />
                   </div>
                 </div>
               </div>

@@ -66,7 +66,7 @@ export const MainNearConfig = {
   widgets: {
     image: "mob.near/widget/Image",
     default: "evrything.near/widget/Everything.MainPage",
-    create: "evrything.near/widget/Everything.CreatePage",
+    create: "evrything.near/widget/Everything.Create.Test",
     viewSource: "mob.near/widget/WidgetSource",
     widgetMetadataEditor: "mob.near/widget/WidgetMetadataEditor",
     widgetMetadata: "mob.near/widget/WidgetMetadata",
