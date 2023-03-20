@@ -1,5 +1,21 @@
+import { sanitizeUrl } from "@braintree/sanitize-url";
+import Big from "big.js";
+import BN from "bn.js";
+import * as elliptic from "elliptic";
 import React from "react";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import { Typeahead } from "react-bootstrap-typeahead";
+import "react-bootstrap-typeahead/css/Typeahead.bs5.css";
+import "react-bootstrap-typeahead/css/Typeahead.css";
+import Files from "react-files";
+import InfiniteScroll from "react-infinite-scroller";
+import Masonry from "react-masonry-css";
+import styled, { isStyledComponent, keyframes } from "styled-components";
+import * as nacl from "tweetnacl";
+import { CommitButton } from "../components/Commit";
+import { Markdown } from "../components/Markdown";
 import { Widget } from "../components/Widget/Widget";
+import { NearConfig } from "../data/near";
 import {
   deepFreeze,
   ipfsUpload,
@@ -7,24 +23,8 @@ import {
   isArray,
   isObject,
   isString,
-  Loading,
+  Loading
 } from "../data/utils";
-import Files from "react-files";
-import { sanitizeUrl } from "@braintree/sanitize-url";
-import { NearConfig } from "../data/near";
-import { Markdown } from "../components/Markdown";
-import InfiniteScroll from "react-infinite-scroller";
-import Masonry from 'react-masonry-css';
-import { CommitButton } from "../components/Commit";
-import "react-bootstrap-typeahead/css/Typeahead.css";
-import "react-bootstrap-typeahead/css/Typeahead.bs5.css";
-import { Typeahead } from "react-bootstrap-typeahead";
-import styled, { isStyledComponent, keyframes } from "styled-components";
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
-import Big from "big.js";
-import * as elliptic from "elliptic";
-import BN from "bn.js";
-import * as nacl from "tweetnacl";
 
 const frozenNacl = Object.freeze({
   randomBytes: deepFreeze(nacl.randomBytes),
@@ -151,6 +151,7 @@ const Keywords = {
   styled: true,
   Object: true,
   Type: true,
+  Evrything: true,
   Date,
   Number,
   Big,
@@ -489,7 +490,15 @@ class VmStack {
     } else if (element === "InfiniteScroll") {
       return <InfiniteScroll {...attributes}>{children}</InfiniteScroll>;
     } else if (element === "Masonry") {
-      return <Masonry {...attributes} className="masonry-grid" columnClassName="masonry-grid_column">{children}</Masonry>;
+      return (
+        <Masonry
+          {...attributes}
+          className="masonry-grid"
+          columnClassName="masonry-grid_column"
+        >
+          {children}
+        </Masonry>
+      );
     } else if (element === "Tooltip") {
       return <Tooltip {...attributes}>{children}</Tooltip>;
     } else if (element === "OverlayTrigger") {
@@ -614,24 +623,139 @@ class VmStack {
           blockId,
           maybeSubscribe(subscribe, blockId)
         );
-      // START Type
+        // START Type
       } else if (keyword === "Type" && callee === "get") {
         if (args.length < 1) {
           throw new Error("Missing argument 'src' for Type.get");
         }
-        const raw = this.vm.cachedSocialGet(args[0], false, undefined, undefined);
+        const raw = this.vm.cachedSocialGet(
+          args[0],
+          false,
+          undefined,
+          undefined
+        );
         if (raw) {
           return JSON.parse(raw);
         } else {
           return null;
         }
-      // END Type
-      // START Everything
-      // } else if (keyword === "Everything" && callee === "create") {
-      //   if (args.length < 3) {
-      //     throw new Error("Method: Everything.create. Required arguments: 'type', 'data'")
-      //   }
-      // END Everything
+        // END Type
+        // START Everything
+      } else if (keyword === "Evrything" && callee === "create") {
+        if (args.length < 2) {
+          throw new Error(
+            "Method: Evrything.create. Required arguments: 'data', 'type'. Optional: 'editable': boolean = false"
+          );
+        }
+        const data = args[0];
+        const type = args[1];
+        const editable = args[2] ?? false;
+
+        if (editable) {
+          // THIS DOES NOT WORK. asyncFetch promise doesn't resolve in time, so the "then" happens after the fact, never updating state
+          // const response = this.vm.asyncFetch(
+          //   "https://monkfish-app-ginhc.ondigitalocean.app/graphql",
+          //   {
+          //     method: "POST",
+          //     headers: {
+          //       "Content-Type": "application/json",
+          //     },
+          //     body: JSON.stringify({
+          //       query:
+          //         "mutation CreateIdea($type: String, $title: String) { things { create(name: $type) { message } addIdea(name: $title) { entities { id } } } }",
+          //       variables: {
+          //         type,
+          //         ...data.values,
+          //       },
+          //     }),
+          //   }
+          // ).then((res) => {
+          //     if (res.body.errors) {
+          //       return {
+          //         thing: {
+          //           main: JSON.stringify({
+          //             error: {
+          //               message: res.body.errors,
+          //             },
+          //           }),
+          //         },
+          //         index: {
+          //           everythingv0: JSON.stringify({
+          //             key: "main",
+          //             value: { type },
+          //           }),
+          //         },
+          //       };
+          //     } else {
+          //       return {
+          //         thing: {
+          //           main: JSON.stringify({
+          //             thingId: res.body.data.things.addIdea.entities[0].id,
+          //           }),
+          //         },
+          //         index: {
+          //           everythingv0: JSON.stringify({
+          //             key: "main",
+          //             value: { type },
+          //           }),
+          //         },
+          //       };
+          //     }
+          // });
+        } else {
+          return {
+            thing: { main: JSON.stringify(data.values) },
+            index: {
+              everythingv0: JSON.stringify({
+                key: "main",
+                value: { type },
+              }),
+            },
+          };
+        }
+      } else if (keyword === "Evrything" && callee === "get") {
+        if (args.length < 3) {
+          throw new Error(
+            "Method: Evrything.get. Required arguments: 'source', 'options', 'variables'"
+          );
+        }
+        const source = args[0];
+        const options = args[1];
+        const variables = args[2];
+
+        switch (
+          source // this could be a type
+        ) {
+          case "FIBERY":
+            const data = this.vm.cachedFetch(options.url, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                query: options.query,
+                variables: variables,
+              }),
+            });
+            if (data.body.errors) {
+              return data.body.errors;
+            } else {
+              return data.body.data;
+            }
+          default:
+            if (options.accountId && options.blockheight) {
+              return JSON.parse(
+                this.vm.cachedSocialGet(
+                  `${options.accountId}/thing/main`,
+                  false,
+                  options.blockHeight
+                ) ?? "null"
+              );
+            } else {
+              return { error: { message: "error saving" } };
+            }
+        }
+        // END Everything
       } else if (keyword === "Near" && callee === "asyncView") {
         if (args.length < 2) {
           throw new Error(
@@ -1592,6 +1716,10 @@ export default class VM {
 
   asyncFetch(url, options) {
     return this.cache.asyncFetch(url, options);
+  }
+
+  fetchEverything(url, options) {
+    return this.cache.fetchEverything(url, options);
   }
 
   cachedFetch(url, options) {
