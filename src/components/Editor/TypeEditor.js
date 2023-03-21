@@ -51,6 +51,7 @@ export default function TypeEditor(props) {
   const [properties, setProperties] = useState([]);
   const [genCreate, setGenCreate] = useState(false);
   const [genView, setGenView] = useState(false);
+  const [genSummary, setGenSummary] = useState(false);
 
   const [renderJson, setRenderJson] = useState(json);
   const [metadata, setMetadata] = useState(undefined);
@@ -290,6 +291,9 @@ export default function TypeEditor(props) {
       properties: properties,
       widgets: {},
     };
+    data.widgets.summary = genSummary
+      ? `${accountId}/widget/Everything.Summary.${typeName}`
+      : data.widgets.summary;
     data.widgets.view = genView
       ? `${accountId}/widget/Everything.View.${typeName}`
       : data.widgets.view;
@@ -297,6 +301,27 @@ export default function TypeEditor(props) {
       ? `${accountId}/widget/Everything.Create.${typeName}`
       : data.widgets.create;
     return JSON.stringify(data);
+  };
+
+  const generateSummary = () => {
+    return ViewWidget.replace(
+      "{SVG}",
+      '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M17 12C17 14.76 14.76 17 12 17V7C14.76 7 17 9.24 17 12Z" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 7V17C9.24 17 7 14.76 7 12C7 9.24 9.24 7 12 7Z" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 22V17" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 7V2" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+    ).replace(
+      "{DATA}",
+      properties
+        .map((it) => {
+          switch (it.type) {
+            case "String":
+              return `<p>{data["${it.name}"]}</p>`;
+            case "md":
+              return `<Markdown text={data["${it.name}"]} />`;
+            default:
+              return;
+          }
+        })
+        .join(" ")
+    );
   };
 
   const generateView = () => {
@@ -356,8 +381,13 @@ export default function TypeEditor(props) {
       },
     };
 
-    if (genView || genCreate) {
+    if (genSummary || genView || genCreate) {
       data.widget = {};
+      if (genSummary) {
+        data.widget[`Everything.Summary.${typeName}`] = {
+          "": generateSummary(),
+        };
+      }
       if (genView) {
         data.widget[`Everything.View.${typeName}`] = {
           "": generateView(),
@@ -535,6 +565,18 @@ export default function TypeEditor(props) {
                     properties={properties}
                   />
                   <div>
+                    <div className="form-group">
+                      <input
+                        id="genSummary"
+                        className="form-check-input"
+                        type="checkbox"
+                        value={genView}
+                        onChange={(e) => setGenSummary(!genSummary)}
+                      />
+                      <label class="form-check-label" for="genSummary">
+                        Autogenerate Summary Widget
+                      </label>
+                    </div>
                     <div className="form-group">
                       <input
                         id="genView"

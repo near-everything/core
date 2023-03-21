@@ -33,15 +33,5 @@ export default function TypePreview(props) {
         })}
       </div>
     </>
-    // <Widget
-    //   key={`preview-${jpath}-view`}
-    //   code={ViewWidget}
-    //   data={renderJson}
-    // />
-    //   <Widget
-    //   key={`preview-${jpath}-create`}
-    //   code={CreateWidget}
-    //   data={renderJson}
-    // />
   );
 }
