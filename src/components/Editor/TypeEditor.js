@@ -353,7 +353,7 @@ export default function TypeEditor(props) {
 
     return CreateWidget.replace("TYPE_STR", `${accountId}/type/${typeName}`)
       .replace("PROPERTIES", JSON.stringify(initState))
-      .replace("VERSION", "everythingv0")
+      .replace("VERSION", "tempeverything")
       .replace(
         "{FORM_BODY}",
         properties
