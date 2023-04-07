@@ -14,15 +14,4 @@ pnpm i
 pnpm run dev
 ```
 
-
-
-To run a widget:
-
-```bash
-pnpm --filter gateway run build
-```
-
-
-```bash
-pnpm run 
-```
+This will open the gateway at localhost:3000 and the widgets at localhost:3001
