@@ -1,2 +1,2 @@
 [submodule "tools/near-social-local-viewer"]
-	url = https://github.com/username/new-submodule-url.git
+	url = https://github.com/elliotBraem/near-social-local-viewer/tree/feature/custom-gateway
