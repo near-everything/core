@@ -4,9 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "pnpm --filter gateway dev & node tools/near-social-local-viewer/init-viewer.js widgets"
+    "dev": "concurrently \"pnpm run dev:apps\" \"pnpm dev:widgets\"",
+    "dev:apps": "npx nx run-many --target=dev --projects=gateway",
+    "dev:widgets": "VIEWER_PORT=3005 node tools/near-social-local-viewer/init-viewer.js widgets"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^8.0.1"
+  },
+  "devDependencies": {
+    "nx": "^15.9.2"
+  }
 }
