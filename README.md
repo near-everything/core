@@ -30,7 +30,6 @@ pnpm run dev
 This will open the gateway at localhost:3000 and uses [near social local viewer](https://github.com/wpdas/near-social-local-viewer) to hot reload widgets at localhost:3005.
 
 
----
 
 ## Structure
 
@@ -59,12 +58,6 @@ React App that handles navigation, login, and uses the VM to render widgets. Mos
 [GraphQL mesh](https://the-guild.dev/graphql/mesh) used for accessing and creating off-chain data.
 
 
-## Contributing
-
-<a href="http://www.textfiles.com/underconstruction">
-<span>
-<img src="./assets/dig_left.gif" />
-<img src="./assets/construction_banner.gif" />
 <img src="./assets/dig_right.gif" />
 </span>
 </a>
