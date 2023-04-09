@@ -1,4 +1,11 @@
-const externalAppUrl = "https://strike-card.vercel.app/";
+const externalAppUrl = "https://d6f119538fc5.ngrok.app/";
+
+/**
+ * Request Handlers - Backend.
+ *
+ * - request: payload sent by External App
+ *
+ * - response: method to send const externalAppUrl = "https://strike-card.vercel.app/";
 
 /**
  * Initial Path (optional but recommended)
@@ -28,34 +35,39 @@ const initialPayload = {};
  */
 const requestHandler = (request, response, Utils) => {
   switch (request.type) {
-    case "sign-card":
-      handleSignCard(request, response);
+    case "create-type":
+      handleCreateType(request, response);
       break;
   }
 };
 
-const handleSignCard = (request, response) => {
+const handleCreateType = (request, response) => {
   const { payload } = request;
   if (payload) {
-    asyncFetch("https://2ed0-172-56-161-197.ngrok.io/graphql", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Strike-Card": "simple",
+    Social.set(
+      {
+        type: {
+          [payload.name]: {
+            "": JSON.stringify({ properties: payload.properties }),
+          },
+        },
       },
-      body: JSON.stringify({
-        query:
-          'mutation signCard($firstName: String = "", $lastName: String = "", $email: String = "", $phone: String = "", $sponsor: String = "", $consent: Boolean = false) { signatures { create(firstName: $firstName, lastName: $lastName, email: $email, phone: $phone, sponsor: $sponsor, consent: $consent) { message } } }',
-        variables: payload,
-      }),
-    }).then((res) => {
-      if (res.body.errors) {
-        response(request).send(res.body.error);
-      } else {
-        response(request).send(res.body.data);
+      {
+        force: true,
+        onCommit: () => {
+          response(request).send({ success: true });
+        },
+        onCancel: () => {
+          response(request).send({ error: "the action was canceled" });
+        },
       }
-    });
+    );
+    return;
   }
+  // Error
+  response(request).send({
+    error: "type must be provided",
+  });
 };
 
 return (
