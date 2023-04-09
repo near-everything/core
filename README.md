@@ -1,20 +1,13 @@
-<span><a href="http://www.textfiles.com/underconstruction" align="center">
+<a href="http://www.textfiles.com/underconstruction" align="center">
 <img src="./assets/dig_left.gif" />
 </a>
 
-</span>
-<p align="center" ><span style="font-size: 4em;">
-  everything
-  </span><span style="font-size: 2em;">
-  core
-</span>
-</p>
-
-<div id="user-content-toc">
+<p align="center" ><div>
   <ul>
-    <summary><h1 style="display: inline-block;">NO LINE</h1></summary>
+    <summary style="display: inline-block;" align="center"><h1>everything</h1></summary>
   </ul>
 </div>
+</p>
 
 <img src="./assets/built_on.png" height="32" />
 
