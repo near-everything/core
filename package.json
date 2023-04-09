@@ -7,7 +7,7 @@
     "dev": "concurrently \"pnpm run dev:apps\" \"pnpm dev:widgets\"",
     "dev:apps": "npx nx run-many --target=dev --projects=gateway",
     "dev:widgets": "VIEWER_PORT=3005 node tools/near-social-local-viewer/init-viewer.js widgets",
-    "build": "npx nx run --target=build --projects=gateway"
+    "build": "npx nx run gateway:build"
   },
   "keywords": [],
   "author": "",
