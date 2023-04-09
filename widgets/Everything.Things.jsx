@@ -1,11 +1,8 @@
-const type = props.type;
-
-if (!type) {
-  return "props.type is not defined";
-}
+const type = props.type || "everything";
+const domain = props.domain || "everything";
 
 const index = {
-  action: "tempeverything", // this could work as a sort of "domain"...
+  action: domain, // this could work as a sort of "domain"... ev02
   key: "main",
   options: {
     limit: 10,
@@ -14,10 +11,18 @@ const index = {
 };
 
 const renderThing = (a) => {
-  if (
-    a.value.type === props.type ||
-    props.type === "evrything.near/type/Everything"
-  ) {
+  if (type === "everything" || a.value.type === type) {
+    // check for modification
+    // see Everything.View.Thing to see the delete function
+    // but since we can't actually delete the data,
+    // we will check if this blockheight has been modified/hid
+    const mod = JSON.parse(
+      Social.get(`${a.accountId}/modification/${a.blockHeight}`) || "null"
+    );
+    // if it has been modified with a hide, then return null
+    if (mod && mod.action === "HIDE") {
+      return null;
+    }
     return (
       <Widget
         src={"evrything.near/widget/Everything.Summary.Thing"}
@@ -31,13 +36,9 @@ const renderThing = (a) => {
   }
 };
 
-const typeFilter = props.type !== "evrything.near/type/Everything";
-
 return (
-  <div>
-    <Widget
-      src="evrything.near/widget/FilteredIndexMasonry"
-      props={{ index, renderItem: renderThing, type: typeFilter }}
-    />
-  </div>
+  <Widget
+    src="evrything.near/widget/FilteredIndexMasonry"
+    props={{ index, renderItem: renderThing }}
+  />
 );
