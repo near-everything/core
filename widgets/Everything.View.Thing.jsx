@@ -7,11 +7,13 @@ const ThingContainer = styled.div`
 const Toolbar = styled.div`
   display: flex;
   justify-content: flex-end;
-  align-items: center;
+  align-items: baseline;
+  gap: 8px;
 `;
 
-const Icon = styled.div`
+const Icon = styled.button`
   cursor: pointer;
+  text-transform: lowercase !important;
 `;
 
 const src = props.src;
@@ -24,6 +26,8 @@ const content = JSON.parse(
 
 const hideThing = () => {
   // this will hide from ALL domains... how can this be selective?
+  // and it only works if hidden by the account...
+  // maybe the "owner" account could have moderation abilities
   Social.set(
     {
       modification: {
@@ -33,18 +37,19 @@ const hideThing = () => {
       },
     },
     {
-      force: true
+      force: true,
     }
   );
-}
+};
 
 return (
   <ThingContainer>
-    {context.accountId === accountId ? (
-      <Toolbar>
+    <Toolbar>
+      <p>thing created by : {accountId}</p>
+      {context.accountId === accountId ? (
         <Icon onClick={hideThing}>Hide</Icon>
-      </Toolbar>
-    ) : null}
+      ) : null}
+    </Toolbar>
 
     <Widget
       src={src}

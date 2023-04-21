@@ -1,11 +1,14 @@
-const externalAppUrl = "https://d6f119538fc5.ngrok.app/";
+// Repository: https://github.com/near-everything/type-creator
+// const externalAppUrl = "https://type-creator.vercel.app/";
+const externalAppUrl = "https://649451d514cd.ngrok.app/";
+const accountId = context.accountId;
 
-/**
- * Request Handlers - Backend.
- *
- * - request: payload sent by External App
- *
- * - response: method to send const externalAppUrl = "https://strike-card.vercel.app/";
+const types = Social.keys("evrything.near/type/*", "final", {
+  return_type: "BlockHeight",
+  values_only: true,
+});
+types = Object.entries(types["evrything.near"].type ?? {});
+types = types.map(item => item[0])
 
 /**
  * Initial Path (optional but recommended)
@@ -15,7 +18,9 @@ const path = props.path;
  * Initial view height (optional but recommended)
  */
 const initialViewHeight = 500;
-const initialPayload = {};
+const initialPayload = {
+  types
+};
 
 /**
  * Request Handlers - Backend.
@@ -48,7 +53,25 @@ const handleCreateType = (request, response) => {
       {
         type: {
           [payload.name]: {
-            "": JSON.stringify({ properties: payload.properties }),
+            "": JSON.stringify({
+              properties: payload.properties,
+              widgets: {
+                summary: `${accountId}/widget/Everything.Summary.${payload.name}`,
+                view: `${accountId}/widget/Everything.View.${payload.name}`,
+                create: `${accountId}/widget/Everything.Create.${payload.name}`,
+              },
+            }),
+          },
+        },
+        widget: {
+          [`Everything.Summary.${payload.name}`]: {
+            "": `const data= props.data; return (<><p>Configure <a href="/#/edit/${accountId}/widget/Everything.Summary.${payload.name}">this widget</a> to attractively display your data below:</p><p>{JSON.stringify(data)}</p></>);`,
+          },
+          [`Everything.View.${payload.name}`]: {
+            "": `const data= props.data; return (<><p>Configure <a href="/#/edit/${accountId}/widget/Everything.View.${payload.name}">this widget</a>to attractively display your data below:</p><p>{JSON.stringify(data)}</p></>);`,
+          },
+          [`Everything.Create.${payload.name}`]: {
+            "": `return (<><p>Click deploy below then put the app url in the <a href="/#/edit/${accountId}/widget/Everything.Create.${payload.name}">create widget</a>.</p><a href="https://vercel.com/new/clone?repository-url=https://github.com/near-everything/thing-creator" target="_blank"><img src="https://vercel.com/button" alt="Deploy with Vercel" /></a><Widget src={"evrything.near/widget/Bridge"} props={{ externalAppUrl: "", type: "${accountId}/type/${payload.name}" }} /></>);`,
           },
         },
       },

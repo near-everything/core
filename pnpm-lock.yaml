@@ -65,9 +65,6 @@ importers:
       near-api-js:
         specifier: ^0.45.1
         version: 0.45.1
-      near-social-local-viewer:
-        specifier: workspace:*
-        version: link:../../tools/near-social-local-viewer
       near-social-vm:
         specifier: workspace:*
         version: link:../../packages/vm

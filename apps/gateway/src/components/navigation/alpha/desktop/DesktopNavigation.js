@@ -18,7 +18,7 @@ const StyledNavigation = styled.div`
   left: 0;
   right: 0;
   width: 100%;
-  background-color: var(--slate-dark-1);
+  // background-color: var(--slate-dark-1);
   z-index: 1000;
   padding: 12px 0;
 
@@ -111,7 +111,7 @@ export function DesktopNavigation(props) {
   return (
     <StyledNavigation onMouseLeave={() => setMenuDropdown(false)}>
       <div className="container">
-        <Link to="/" className="logo-link">
+        {/* <Link to="/" className="logo-link">
           <Logo />
         </Link>
         <div className="form-wrapper">
@@ -145,7 +145,7 @@ export function DesktopNavigation(props) {
           <NavDropdownButton onMouseEnter={() => setMenuDropdown("develop")}>
             Develop
           </NavDropdownButton>
-        </div>
+        </div> */}
         <div className="user-section">
           {!props.signedIn && (
             <SignInButton onSignIn={() => props.requestSignIn()} />

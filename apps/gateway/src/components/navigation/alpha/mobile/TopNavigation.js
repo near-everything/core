@@ -5,6 +5,7 @@ import LogoBlack from "../icons/logo-black.svg";
 import CodeSmall from "../icons/code-small.svg";
 import { AvatarPlaceholder } from "../icons/AvatarPlaceholder";
 import { Widget } from "near-social-vm";
+import { SignInButton } from "../SignInButton";
 
 const StyledNavigation = styled.div`
   position: sticky;
@@ -13,12 +14,11 @@ const StyledNavigation = styled.div`
   right: 0;
   width: 100%;
   background-color: white;
-  border-bottom: 1px solid #eceef0;
   z-index: 1000;
   padding: 16px 24px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
 
   .nav-notification-widget {
     margin: 0;
@@ -49,7 +49,7 @@ const StyledNavigation = styled.div`
 export function TopNavigation(props) {
   return (
     <StyledNavigation>
-      <button
+      {/* <button
         onClick={() => props.onClickShowMenu("left")}
         className="mobile-nav-profile-btn"
       >
@@ -74,7 +74,10 @@ export function TopNavigation(props) {
         onClick={() => props.onClickShowMenu("right")}
       >
         <img src={CodeSmall} />
-      </button>
+      </button> */}
+                {!props.signedIn && (
+            <SignInButton onSignIn={() => props.requestSignIn()} />
+          )}
     </StyledNavigation>
   );
 }
