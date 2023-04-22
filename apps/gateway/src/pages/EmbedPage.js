@@ -29,7 +29,8 @@ export default function EmbedPage(props) {
 
   return (
     <div className="d-inline-block position-relative overflow-hidden">
-      <Widget
+      <Widget key={src} src={src} props={widgetProps} />
+      {/* <Widget
         key={props.tos.checkComponentPath}
         src={props.tos.checkComponentPath}
         props={{
@@ -38,7 +39,7 @@ export default function EmbedPage(props) {
           targetComponent: src,
           targetProps: widgetProps,
         }}
-      />{" "}
+      /> */}
     </div>
   );
 }

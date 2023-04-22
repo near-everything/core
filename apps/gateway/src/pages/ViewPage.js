@@ -47,16 +47,17 @@ export default function ViewPage(props) {
             paddingTop: "var(--body-top-padding)",
           }}
         >
-          <Widget
-            key={props.tos.checkComponentPath}
-            src={props.tos.checkComponentPath}
-            props={{
-              logOut: props.logOut,
-              targetProps: widgetProps,
-              targetComponent: src,
-              tosName: props.tos.contentComponentPath,
-            }}
-          />{" "}
+          <Widget key={src} src={src} props={widgetProps} />
+          {/* <Widget
+        key={props.tos.checkComponentPath}
+        src={props.tos.checkComponentPath}
+        props={{
+          logOut: props.logOut,
+          tosName: props.tos.contentComponentPath,
+          targetComponent: src,
+          targetProps: widgetProps,
+        }}
+      /> */}
         </div>
       </div>
     </div>
