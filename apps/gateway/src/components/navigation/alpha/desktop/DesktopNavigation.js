@@ -102,6 +102,11 @@ const StyledNavigation = styled.div`
       height: 20px;
     }
   }
+
+  .button-group {
+    display: flex;
+    gap: 8px;
+  }
 `;
 
 export function DesktopNavigation(props) {
@@ -148,7 +153,12 @@ export function DesktopNavigation(props) {
         </div> */}
         <div className="user-section">
           {!props.signedIn && (
-            <SignInButton onSignIn={() => props.requestSignIn()} />
+             <div className="button-group">
+             <a href="https://shard.dog/go?url=https://near.social">
+               <button>register</button>
+             </a>
+             <SignInButton onSignIn={() => props.requestSignIn()} />
+           </div>
           )}
           {props.signedIn && (
             <>

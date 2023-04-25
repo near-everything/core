@@ -44,6 +44,11 @@ const StyledNavigation = styled.div`
     padding: 0;
     outline: none;
   }
+
+  .button-group {
+    display: flex;
+    gap: 8px;
+  }
 `;
 
 export function TopNavigation(props) {
@@ -75,9 +80,14 @@ export function TopNavigation(props) {
       >
         <img src={CodeSmall} />
       </button> */}
-                {!props.signedIn && (
-            <SignInButton onSignIn={() => props.requestSignIn()} />
-          )}
+      {!props.signedIn && (
+        <div className="button-group">
+          <a href="https://shard.dog/go?url=https://near.social">
+            <button>register</button>
+          </a>
+          <SignInButton onSignIn={() => props.requestSignIn()} />
+        </div>
+      )}
     </StyledNavigation>
   );
 }
