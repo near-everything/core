@@ -21,6 +21,7 @@ import Big from "big.js";
 import { NavigationWrapper } from "./components/navigation/alpha/NavigationWrapper";
 import { NetworkId, Widgets } from "./data/widgets";
 import styled from "styled-components";
+import WebcamComponent from "./pages/Camera";
 
 const StyledApp = styled.div`
   @media (max-width: 991px) {
@@ -68,6 +69,7 @@ function App(props) {
   const location = window.location;
 
   useEffect(() => {
+    localStorage.setItem("one", "hello world");
     initNear &&
       initNear({
         networkId: NetworkId,
@@ -178,6 +180,9 @@ function App(props) {
         <Switch>
           <Route path={"/embed/:widgetSrc*"}>
             <EmbedPage {...passProps} />
+          </Route>
+          <Route path={"/camera"}>
+            <WebcamComponent/>
           </Route>
           <Route path={"/edit/:widgetSrc*"}>
             <NavigationWrapper {...passProps} />

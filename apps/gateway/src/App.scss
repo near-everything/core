@@ -54,3 +54,36 @@ a {
   background-clip: padding-box;
   height: 100%;
 }
+
+.webcam-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #282c34;
+}
+
+.webcam {
+  width: 100%;
+  height: 100%;
+}
+
+.capture-button {
+  position: fixed;
+  bottom: 20px;
+  background-color: #61dafb;
+  color: #282c34;
+  font-size: 1.2rem;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+
+}
+
+.capture-button:hover {
+  background-color: #39a9db;
+  color: white;
+}

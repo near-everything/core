@@ -852,6 +852,16 @@ class VmStack {
           },
           args[0]
         );
+      } else if (keyword === "Storage" && callee === "getGateway") {
+        if (args.length < 1) {
+          throw new Error("Missing argument 'key' for Storage.get");
+        }
+        return localStorage.getItem(args[0]);
+      } else if (keyword === "Storage" && callee === "setGateway") {
+        if (args.length < 1) {
+          throw new Error("Missing argument 'key' for Storage.get");
+        }
+        return localStorage.setItem(args[0], args[1]);
       } else if (keyword === "console" && callee === "log") {
         return console.log(this.vm.widgetSrc, ...args);
       } else if (keyword === "clipboard" && callee === "writeText") {
