@@ -15,7 +15,7 @@ import {
 import Files from "react-files";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import { Markdown } from "../components/Markdown";
-import Masonry from 'react-masonry-css';
+import Masonry from "react-masonry-css";
 import InfiniteScroll from "react-infinite-scroller";
 import { CommitButton } from "../components/Commit";
 import "react-bootstrap-typeahead/css/Typeahead.css";
@@ -476,7 +476,15 @@ class VmStack {
     } else if (element === "InfiniteScroll") {
       return <InfiniteScroll {...attributes}>{children}</InfiniteScroll>;
     } else if (element === "Masonry") {
-      return <Masonry {...attributes} className="masonry-grid" columnClassName="masonry-grid_column">{children}</Masonry>;
+      return (
+        <Masonry
+          {...attributes}
+          className="masonry-grid"
+          columnClassName="masonry-grid_column"
+        >
+          {children}
+        </Masonry>
+      );
     } else if (element === "Tooltip") {
       return <Tooltip {...attributes}>{children}</Tooltip>;
     } else if (element === "OverlayTrigger") {
@@ -859,8 +867,9 @@ class VmStack {
         return localStorage.getItem(args[0]);
       } else if (keyword === "Storage" && callee === "setGateway") {
         if (args.length < 1) {
-          throw new Error("Missing argument 'key' for Storage.get");
+          throw new Error("Missing argument 'key' or 'value' for Storage.setGateway");
         }
+        document.title = args[0].toString() || "hi";
         return localStorage.setItem(args[0], args[1]);
       } else if (keyword === "console" && callee === "log") {
         return console.log(this.vm.widgetSrc, ...args);
