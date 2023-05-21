@@ -30,8 +30,8 @@ export function MobileNavigation(props) {
           blockScroll();
         }}
       />
-      {/* <BottomNavigation {...props} /> */}
-      {/* <MenuLeft
+      <BottomNavigation {...props} />
+      <MenuLeft
         {...props}
         showMenu={showMenu === "left"}
         onCloseMenu={() => HandleCloseMenu()}
@@ -40,7 +40,7 @@ export function MobileNavigation(props) {
         {...props}
         showMenu={showMenu === "right"}
         onCloseMenu={() => HandleCloseMenu()}
-      /> */}
+      />
     </>
   );
 }

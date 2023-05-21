@@ -15,11 +15,19 @@ module.exports = function (env) {
   return merge(
     {
       mode,
+      experiments: {
+        topLevelAwait: true,
+      },
       entry: `${paths.srcPath}/index.js`,
       output: {
         path: paths.distPath,
         filename: "[name].bundle.js",
         publicPath: "/",
+      },
+      devServer: {
+        historyApiFallback: {
+          disableDotRule: true,
+        },
       },
       module: {
         rules: [
@@ -47,6 +55,9 @@ module.exports = function (env) {
         fallback: {
           crypto: require.resolve("crypto-browserify"),
           stream: require.resolve("stream-browserify"),
+          http: require.resolve("stream-http"),
+          https: require.resolve("https-browserify"),
+          // "browser": require.resolve("browser"),
         },
         // Fix for using `yarn link "near-social-vm"`
         alias: {
@@ -77,6 +88,7 @@ module.exports = function (env) {
           template: `${paths.publicPath}/index.html`,
           favicon: `${paths.publicPath}/favicon.png`,
           robots: `${paths.publicPath}/robots.txt`,
+          publicPath: "/",
         }),
         new webpack.ProgressPlugin(),
         new webpack.ProvidePlugin({

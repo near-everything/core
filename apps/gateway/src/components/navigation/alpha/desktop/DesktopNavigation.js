@@ -1,16 +1,18 @@
 import React, { useState } from "react";
-import styled from "styled-components";
+
 import { Link } from "react-router-dom";
 import { Logo } from "../icons/Logo";
-import { Return } from "../icons/Return";
+import { NavDropdownButton } from "./NavDropdownButton";
+import { NavDropdownMenu } from "./nav_dropdown/NavDropdownMenu";
 import { NavigationButton } from "../NavigationButton";
+import { NotificationWidget } from "../NotificationWidget";
+import { Return } from "../icons/Return";
 import { SignInButton } from "../SignInButton";
 import { UserDropdown } from "./UserDropdown";
-import { NavDropdownMenu } from "./nav_dropdown/NavDropdownMenu";
-import { NavDropdownButton } from "./NavDropdownButton";
-import { NotificationWidget } from "../NotificationWidget";
 import image from "../icons/search.svg";
+import styled from "styled-components";
 import { useHistory } from "react-router-dom";
+import { recordEvent } from "../../../../../utils/analytics";
 
 const StyledNavigation = styled.div`
   position: sticky;
@@ -18,7 +20,7 @@ const StyledNavigation = styled.div`
   left: 0;
   right: 0;
   width: 100%;
-  // background-color: var(--slate-dark-1);
+  background-color: var(--slate-dark-1);
   z-index: 1000;
   padding: 12px 0;
 
@@ -102,11 +104,6 @@ const StyledNavigation = styled.div`
       height: 20px;
     }
   }
-
-  .button-group {
-    display: flex;
-    gap: 8px;
-  }
 `;
 
 export function DesktopNavigation(props) {
@@ -116,7 +113,7 @@ export function DesktopNavigation(props) {
   return (
     <StyledNavigation onMouseLeave={() => setMenuDropdown(false)}>
       <div className="container">
-        {/* <Link to="/" className="logo-link">
+        <Link to="/" className="logo-link">
           <Logo />
         </Link>
         <div className="form-wrapper">
@@ -124,14 +121,17 @@ export function DesktopNavigation(props) {
             onSubmit={(e) => {
               e.preventDefault();
               history.push(
-                `/${props.widgets?.globalSearchPage}?term=${e.target[0].value}`
+                `/${props.widgets?.search.indexPage}?term=${e.target[0].value}`
               );
             }}
           >
             <input
               placeholder="Search"
               style={{ backgroundImage: `url(${image})` }}
-              onFocus={() => setSearchInputFocus(true)}
+              onFocus={() => {
+                setSearchInputFocus(true);
+                recordEvent("click-navigation-search");
+              }}
               onBlur={() => setSearchInputFocus(false)}
             />
           </form>
@@ -150,15 +150,14 @@ export function DesktopNavigation(props) {
           <NavDropdownButton onMouseEnter={() => setMenuDropdown("develop")}>
             Develop
           </NavDropdownButton>
-        </div> */}
+        </div>
         <div className="user-section">
+
           {!props.signedIn && (
-             <div className="button-group">
-             <a href="https://shard.dog/go?url=https://near.social">
-               <button>register</button>
-             </a>
-             <SignInButton onSignIn={() => props.requestSignIn()} />
-           </div>
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <SignInButton onSignIn={() => history.push('/signup')} > Sign Up</SignInButton>
+              <SignInButton onSignIn={() => props.requestSignIn()}> Sign In</SignInButton>
+            </div>
           )}
           {props.signedIn && (
             <>

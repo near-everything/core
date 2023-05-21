@@ -5,7 +5,6 @@ import LogoBlack from "../icons/logo-black.svg";
 import CodeSmall from "../icons/code-small.svg";
 import { AvatarPlaceholder } from "../icons/AvatarPlaceholder";
 import { Widget } from "near-social-vm";
-import { SignInButton } from "../SignInButton";
 
 const StyledNavigation = styled.div`
   position: sticky;
@@ -14,11 +13,12 @@ const StyledNavigation = styled.div`
   right: 0;
   width: 100%;
   background-color: white;
+  border-bottom: 1px solid #eceef0;
   z-index: 1000;
   padding: 16px 24px;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
 
   .nav-notification-widget {
     margin: 0;
@@ -44,17 +44,12 @@ const StyledNavigation = styled.div`
     padding: 0;
     outline: none;
   }
-
-  .button-group {
-    display: flex;
-    gap: 8px;
-  }
 `;
 
 export function TopNavigation(props) {
   return (
     <StyledNavigation>
-      {/* <button
+      <button
         onClick={() => props.onClickShowMenu("left")}
         className="mobile-nav-profile-btn"
       >
@@ -79,15 +74,7 @@ export function TopNavigation(props) {
         onClick={() => props.onClickShowMenu("right")}
       >
         <img src={CodeSmall} />
-      </button> */}
-      {!props.signedIn && (
-        <div className="button-group">
-          <a href="https://shard.dog/go?url=https://near.social">
-            <button>register</button>
-          </a>
-          <SignInButton onSignIn={() => props.requestSignIn()} />
-        </div>
-      )}
+      </button>
     </StyledNavigation>
   );
 }
