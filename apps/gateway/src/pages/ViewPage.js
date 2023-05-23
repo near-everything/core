@@ -1,12 +1,11 @@
-import React, { useEffect, useState, useCallback } from "react";
 import { Widget } from "near-social-vm";
-import { useParams } from "react-router-dom";
-import { useQuery } from "../hooks/useQuery";
-import { useHashUrlBackwardsCompatibility } from "../hooks/useHashUrlBackwardsCompatibility";
-import styleZendesk from "../zendesk";
-import { recordClick, recordPageView } from "../utils/analytics";
+import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
+import { useParams } from "react-router-dom";
+import { useHashUrlBackwardsCompatibility } from "../hooks/useHashUrlBackwardsCompatibility";
+import { useQuery } from "../hooks/useQuery";
 import useRedirectMap from "../hooks/useRedirectMap";
+import { recordClick, recordPageView } from "../utils/analytics";
 
 export default function ViewPage(props) {
   const [shouldWaitForMap, redirectMap, loaderError, loaderUrl] =
@@ -52,20 +51,6 @@ export default function ViewPage(props) {
       );
     }, 1);
   }, [src, query, setWidgetSrc, viewSourceWidget]);
-
-  //once the zendesk widget comes online, style it
-  const queueZendeskCheck = useCallback(() => {
-    const zwFrame = document.getElementById("launcher");
-    const zwEmbed = zwFrame?.contentDocument.getElementById("Embed");
-    const zwButton = zwEmbed?.getElementsByTagName("button")[0];
-    if (zwButton) {
-      styleZendesk();
-      return;
-    }
-    setTimeout(queueZendeskCheck, 20);
-  });
-
-  useEffect(queueZendeskCheck, []);
 
   return (
     <>

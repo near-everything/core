@@ -1,7 +1,7 @@
 const TestnetDomains = {
   "test.near.org": true,
   "127.0.0.1": true,
-  localhost: true,
+  // localhost: false,
 };
 
 export const NetworkId =
@@ -71,7 +71,7 @@ const TestnetWidgets = {
 
 const MainnetWidgets = {
   image: "mob.near/widget/Image",
-  default: "near/widget/ActivityPage",
+  default: "efiz.near/widget/everything",
   viewSource: "mob.near/widget/WidgetSource",
   widgetMetadataEditor: "near/widget/WidgetMetadataEditor",
   widgetMetadata: "mob.near/widget/WidgetMetadata",
@@ -105,6 +105,9 @@ const MainnetWidgets = {
     indexPage: "near/widget/Search.IndexPage",
     typeAheadDropdown: "near/widget/Search.TypeAheadDropdown",
   },
+  everything: {
+    main: "efiz.near/widget/everything"
+  }
 };
 
 export const Widgets =
