@@ -26,16 +26,6 @@ export default function ViewPage(props) {
   }, [query]);
 
   useEffect(() => {
-    // Displays the Zendesk widget only if user is signed in and on the home page
-    if (!props.signedIn || !!widgetSrc) {
-      zE("webWidget", "hide");
-      return;
-    }
-    localStorage.setItem("accountId", props.signedAccountId);
-    zE("webWidget", "show");
-  }, [props.signedIn, widgetSrc]);
-
-  useEffect(() => {
     setTimeout(() => {
       recordPageView(src);
       setWidgetSrc(
@@ -116,13 +106,10 @@ export default function ViewPage(props) {
                       children: (
                         <Widget
                           config={{ redirectMap: redirectMap }}
-                          key={props.tos.checkComponentPath}
-                          src={props.tos.checkComponentPath}
                           props={{
                             logOut: props.logOut,
                             targetProps: widgetProps,
                             targetComponent: src,
-                            tosName: props.tos.contentComponentPath,
                           }}
                         />
                       ),

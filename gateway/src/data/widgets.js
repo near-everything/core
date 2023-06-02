@@ -71,7 +71,7 @@ const TestnetWidgets = {
 
 const MainnetWidgets = {
   image: "mob.near/widget/Image",
-  default: "efiz.near/widget/everything",
+  default: "efiz.near/widget/view",
   viewSource: "mob.near/widget/WidgetSource",
   widgetMetadataEditor: "near/widget/WidgetMetadataEditor",
   widgetMetadata: "mob.near/widget/WidgetMetadata",
@@ -106,7 +106,7 @@ const MainnetWidgets = {
     typeAheadDropdown: "near/widget/Search.TypeAheadDropdown",
   },
   everything: {
-    main: "efiz.near/widget/everything"
+    main: "efiz.near/widget/view"
   }
 };
 
